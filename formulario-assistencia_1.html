@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HydroSystem — Abertura de Chamado</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --accent: #1e6ef5;
+    --accent-light: #4d8ef7;
+    --accent-glow: rgba(30,110,245,0.18);
+    --text: #e6edf3;
+    --text-muted: #7d8590;
+    --text-sub: #586069;
+    --success: #2ea043;
+    --error: #f85149;
+    --warn: #d29922;
+    --radius: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 80px;
+  }
+
+  /* Background subtle grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(30,110,245,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30,110,245,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .logo-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .logo-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  header h1 span { color: var(--accent-light); }
+  header p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px 40px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Form grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .card { padding: 24px 20px; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+  }
+  label .req { color: var(--accent-light); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="tel"],
+  textarea,
+  select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 11px 14px;
+    width: 100%;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  input::placeholder, textarea::placeholder { color: var(--text-sub); }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+
+  /* Condomínio search */
+  .search-wrapper {
+    position: relative;
+  }
+  .search-wrapper input { padding-left: 38px; }
+  .search-icon {
+    position: absolute;
+    left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text-sub);
+    pointer-events: none;
+    font-size: 15px;
+  }
+  #cond-suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+  }
+  #cond-suggestions.open { display: block; }
+  .suggestion-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .suggestion-item:last-child { border-bottom: none; }
+  .suggestion-item:hover, .suggestion-item.selected { background: var(--accent-glow); color: var(--accent-light); }
+  .suggestion-item mark { background: none; color: var(--accent-light); font-weight: 600; }
+
+  /* Equipment chips */
+  .chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--text); }
+  .chip.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent-light);
+  }
+
+  /* File upload */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 28px; margin-bottom: 8px; }
+  .upload-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .upload-sub { font-size: 12px; color: var(--text-sub); }
+
+  #file-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .file-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    max-width: 200px;
+  }
+  .file-pill span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-pill button {
+    background: none; border: none;
+    color: var(--text-sub); cursor: pointer;
+    font-size: 14px; line-height: 1;
+    padding: 0;
+    transition: color .15s;
+    flex-shrink: 0;
+  }
+  .file-pill button:hover { color: var(--error); }
+
+  /* Monday config section */
+  .config-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .config-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .config-toggle-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .config-toggle-label .icon { font-size: 16px; }
+  .chevron { transition: transform .25s; font-size: 12px; color: var(--text-sub); }
+  .chevron.open { transform: rotate(180deg); }
+  .config-body {
+    display: none;
+    padding-top: 18px;
+    gap: 14px;
+    flex-direction: column;
+  }
+  .config-body.open { display: flex; }
+  .config-note {
+    font-size: 12px;
+    color: var(--text-sub);
+    line-height: 1.5;
+    padding: 10px 12px;
+    background: rgba(30,110,245,.06);
+    border-left: 2px solid var(--accent);
+    border-radius: 4px;
+    margin-top: 4px;
+  }
+  .config-note a { color: var(--accent-light); text-decoration: none; }
+  .config-note a:hover { text-decoration: underline; }
+
+  /* Submit */
+  .btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .1s, box-shadow .2s;
+    letter-spacing: 0.2px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-submit:hover { background: var(--accent-light); box-shadow: 0 4px 20px rgba(30,110,245,.35); }
+  .btn-submit:active { transform: scale(0.99); }
+  .btn-submit:disabled { background: var(--border); color: var(--text-sub); cursor: not-allowed; box-shadow: none; }
+
+  /* Spinner */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 32px; right: 24px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 999;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all .3s;
+    max-width: 340px;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.success { background: #162921; border: 1px solid var(--success); color: #56d364; }
+  #toast.error { background: #2a1517; border: 1px solid var(--error); color: #f85149; }
+
+  /* Status badge */
+  #status-msg {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    min-height: 20px;
+    margin-top: 10px;
+  }
+
+  /* Field error */
+  .field-error { font-size: 11px; color: var(--error); margin-top: 2px; display: none; }
+  .field.invalid input,
+  .field.invalid textarea,
+  .field.invalid select { border-color: var(--error); }
+  .field.invalid .field-error { display: block; }
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <header>
+    <div class="logo-mark">
+      <div class="logo-icon">💧</div>
+      <span class="logo-name">HydroSystem</span>
+    </div>
+    <h1>Abertura de <span>Chamado Técnico</span></h1>
+    <p>Preencha os dados abaixo para registrar a solicitação de assistência.<br>O chamado será criado automaticamente no sistema.</p>
+  </header>
+
+  <!-- Monday Config -->
+  <div class="config-card">
+    <div class="config-toggle" onclick="toggleConfig()">
+      <span class="config-toggle-label"><span class="icon">⚙️</span> Configuração da API Monday.com</span>
+      <span class="chevron" id="cfg-chevron">▼</span>
+    </div>
+    <div class="config-body" id="cfg-body">
+      <div class="field">
+        <label>API Token <span class="req">*</span></label>
+        <input type="text" id="api-token" placeholder="Cole aqui seu token de acesso Monday (v2)" autocomplete="off" />
+        <div class="config-note">
+          Acesse: <strong>monday.com → Foto de perfil → Developers → My Access Tokens</strong>. O token deve ter permissão de leitura e escrita no board.
+        </div>
+      </div>
+      <div class="field">
+        <label>Board ID <span class="req">*</span></label>
+        <input type="text" id="board-id" value="18404669586" placeholder="Ex: 18404669586" />
+        <div class="config-note">
+          Encontrado na URL do board: <code>monday.com/boards/<strong>18404669586</strong></code>. Já preenchemos com o ID do seu board de Assistência.
+        </div>
+      </div>
+      <div class="config-note" style="margin-top: 0;">
+        ⚠️ As configurações ficam salvas apenas nesta sessão do navegador. Para uso fixo, edite o HTML e substitua as constantes <code>API_TOKEN</code> e <code>BOARD_ID</code> no topo do script.
+      </div>
+    </div>
+  </div>
+
+  <form id="chamado-form" novalidate>
+
+    <!-- Bloco 1: Identificação -->
+    <div class="card">
+      <div class="card-title">01 — Identificação</div>
+      <div class="grid-2">
+
+        <div class="field full" id="f-cond">
+          <label>Condomínio / Cliente <span class="req">*</span></label>
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="cond-input" placeholder="Digite o nome do condomínio..." autocomplete="off" />
+            <div id="cond-suggestions"></div>
+          </div>
+          <input type="hidden" id="cond-id" />
+          <div class="field-error">Selecione ou confirme o condomínio</div>
+        </div>
+
+        <div class="field" id="f-solicitante">
+          <label>Nome do Solicitante <span class="req">*</span></label>
+          <input type="text" id="solicitante" placeholder="Ex: Vinícius Pereira" />
+          <div class="field-error">Campo obrigatório</div>
+        </div>
+
+        <div class="field" id="f-contato">
+          <label>Contato do Solicitante <span class="req">*</span></label>
+          <input type="tel" id="contato" placeholder="Ex: 47 9174-4638" />
+          <div class="field-error">Campo obrigatório</div>
+        </div>
+
+        <div class="field" id="f-endereco">
+          <label>Endereço</label>
+          <input type="text" id="endereco" placeholder="Ex: Rua Osvaldo Reis 3547" />
+        </div>
+
+        <div class="field" id="f-cnpj">
+          <label>CNPJ</label>
+          <input type="text" id="cnpj" placeholder="Ex: 00.000.000/0001-00" maxlength="18" />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bloco 2: Equipamento -->
+    <div class="card">
+      <div class="card-title">02 — Equipamento</div>
+      <div class="field full">
+        <label>Tipo de Equipamento <span class="req">*</span></label>
+        <div class="chip-grid" id="equip-chips">
+          <span class="chip" data-val="Sistema de Recalque">Sistema de Recalque</span>
+          <span class="chip" data-val="Sistema de Pressurização SHP">Pressurização SHP</span>
+          <span class="chip" data-val="Sistema de Pressurização Direta">Pressurização Direta</span>
+          <span class="chip" data-val="Sistema de Pressurização de Cobertura">Pressurização Cobertura</span>
+          <span class="chip" data-val="Sist. Pressurização de Obra">Pressurização de Obra</span>
+          <span class="chip" data-val="Estação de Tratamento de Esgoto">ETE</span>
+          <span class="chip" data-val="Grupo Gerador">Grupo Gerador</span>
+          <span class="chip" data-val="Elevatória de Drenagem">Elevatória Drenagem</span>
+          <span class="chip" data-val="Estação Elevatória Pluvial">Elevatória Pluvial</span>
+          <span class="chip" data-val="Sistema VCN">Sistema VCN</span>
+          <span class="chip" data-val="Outro">Outro</span>
+        </div>
+        <input type="hidden" id="equipamento" />
+        <div class="field-error" id="equip-error" style="display:none; color: var(--error); font-size: 11px; margin-top: 6px;">Selecione ao menos um equipamento</div>
+      </div>
+      <div class="field full" style="margin-top: 16px;" id="f-equip-outro" style="display:none;">
+        <label>Especifique o equipamento</label>
+        <input type="text" id="equip-outro" placeholder="Descreva o equipamento..." />
+      </div>
+    </div>
+
+    <!-- Bloco 3: Descrição -->
+    <div class="card">
+      <div class="card-title">03 — Descrição do Problema</div>
+      <div class="field full" id="f-descricao">
+        <label>Descreva o problema <span class="req">*</span></label>
+        <textarea id="descricao" rows="4" placeholder="Ex: Possível falha no sistema de boias. Bomba não está acionando automaticamente..."></textarea>
+        <div class="field-error">Descreva o problema para prosseguir</div>
+      </div>
+    </div>
+
+    <!-- Bloco 4: Anexos -->
+    <div class="card">
+      <div class="card-title">04 — Fotos e Documentos</div>
+      <div class="field full">
+        <label>Anexar arquivos <small style="color: var(--text-sub); font-weight: 400;">(opcional — fotos, laudos, documentos)</small></label>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="file-input" multiple accept="image/*,.pdf,.doc,.docx" />
+          <div class="upload-icon">📎</div>
+          <div class="upload-title">Arraste arquivos ou clique para selecionar</div>
+          <div class="upload-sub">Imagens (JPG, PNG), PDF, Word — máx. 10 arquivos</div>
+        </div>
+        <div id="file-list"></div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit" id="btn-submit">
+      <span id="btn-text">Registrar Chamado</span>
+      <div class="spinner" id="btn-spinner"></div>
+    </button>
+    <div id="status-msg"></div>
+
+  </form>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIGURAÇÃO — edite aqui para uso fixo
+// ─────────────────────────────────────────────
+const BOARD_ID_DEFAULT = "18404669586";
+const API_TOKEN_DEFAULT = ""; // Cole seu token aqui para não precisar preencher toda vez
+
+// ─────────────────────────────────────────────
+// Utilitários
+// ─────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+let selectedFiles = [];
+
+function showToast(msg, type = "success") {
+  const t = $("toast");
+  t.textContent = (type === "success" ? "✅ " : "❌ ") + msg;
+  t.className = `show ${type}`;
+  setTimeout(() => t.className = "", 3500);
+}
+
+function setStatus(msg, color = "var(--text-muted)") {
+  $("status-msg").style.color = color;
+  $("status-msg").textContent = msg;
+}
+
+// ─────────────────────────────────────────────
+// Config toggle
+// ─────────────────────────────────────────────
+function toggleConfig() {
+  const body = $("cfg-body");
+  const chev = $("cfg-chevron");
+  body.classList.toggle("open");
+  chev.classList.toggle("open");
+}
+
+// Pre-fill defaults
+window.addEventListener("DOMContentLoaded", () => {
+  if (API_TOKEN_DEFAULT) $("api-token").value = API_TOKEN_DEFAULT;
+  if (BOARD_ID_DEFAULT) $("board-id").value = BOARD_ID_DEFAULT;
+  if (!API_TOKEN_DEFAULT) toggleConfig(); // open if not set
+});
+
+// ─────────────────────────────────────────────
+// Condomínio search via Monday API
+// ─────────────────────────────────────────────
+let boardItems = [];
+let searchTimeout;
+
+$("cond-input").addEventListener("input", function() {
+  clearTimeout(searchTimeout);
+  const val = this.value.trim();
+  $("cond-id").value = "";
+  if (val.length < 2) { closeSuggestions(); return; }
+  searchTimeout = setTimeout(() => searchCondominios(val), 350);
+});
+
+$("cond-input").addEventListener("blur", () => {
+  setTimeout(closeSuggestions, 200);
+});
+
+async function searchCondominios(query) {
+  const token = $("api-token").value.trim();
+  const boardId = $("board-id").value.trim();
+  if (!token || !boardId) {
+    // Fallback: show typed value as-is
+    showLocalSuggestion(query);
+    return;
+  }
+
+  const gql = `
+    query {
+      boards(ids: [${boardId}]) {
+        items_page(limit: 50, query_params: {rules: [{column_id: "name", compare_value: ["${query.replace(/"/g,'')}"], operator: contains_text}]}) {
+          items { id name }
+        }
+      }
+    }
+  `;
+
+  try {
+    const res = await fetch("https://api.monday.com/v2", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": token, "API-Version": "2023-10" },
+      body: JSON.stringify({ query: gql })
+    });
+    const data = await res.json();
+    const items = data?.data?.boards?.[0]?.items_page?.items || [];
+    renderSuggestions(items, query);
+  } catch(e) {
+    showLocalSuggestion(query);
+  }
+}
+
+function showLocalSuggestion(query) {
+  renderSuggestions([{ id: null, name: query }], query);
+}
+
+function renderSuggestions(items, query) {
+  const box = $("cond-suggestions");
+  if (!items.length) { closeSuggestions(); return; }
+  box.innerHTML = items.map(item => {
+    const hl = item.name.replace(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+    return `<div class="suggestion-item" data-id="${item.id||''}" data-name="${item.name}">${hl}</div>`;
+  }).join('');
+  box.classList.add("open");
+  box.querySelectorAll(".suggestion-item").forEach(el => {
+    el.addEventListener("mousedown", () => selectCond(el.dataset.id, el.dataset.name));
+  });
+}
+
+function selectCond(id, name) {
+  $("cond-input").value = name;
+  $("cond-id").value = id;
+  closeSuggestions();
+  document.getElementById("f-cond").classList.remove("invalid");
+}
+
+function closeSuggestions() {
+  const box = $("cond-suggestions");
+  box.classList.remove("open");
+  box.innerHTML = "";
+}
+
+// ─────────────────────────────────────────────
+// Equipment chips
+// ─────────────────────────────────────────────
+let selectedEquip = [];
+
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const val = chip.dataset.val;
+    if (val === "Outro") {
+      chip.classList.toggle("active");
+      $("f-equip-outro").style.display = chip.classList.contains("active") ? "flex" : "none";
+      if (!chip.classList.contains("active")) {
+        selectedEquip = selectedEquip.filter(v => v !== "Outro" && !v.startsWith("__outro__"));
+      } else {
+        selectedEquip.push("Outro");
+      }
+    } else {
+      chip.classList.toggle("active");
+      if (chip.classList.contains("active")) {
+        selectedEquip.push(val);
+      } else {
+        selectedEquip = selectedEquip.filter(v => v !== val);
+      }
+    }
+    $("equipamento").value = selectedEquip.join(", ");
+    $("equip-error").style.display = "none";
+  });
+});
+
+// ─────────────────────────────────────────────
+// File upload
+// ─────────────────────────────────────────────
+const uploadZone = $("upload-zone");
+const fileInput = $("file-input");
+
+uploadZone.addEventListener("dragover", e => { e.preventDefault(); uploadZone.classList.add("drag-over"); });
+uploadZone.addEventListener("dragleave", () => uploadZone.classList.remove("drag-over"));
+uploadZone.addEventListener("drop", e => {
+  e.preventDefault();
+  uploadZone.classList.remove("drag-over");
+  addFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener("change", () => addFiles(fileInput.files));
+
+function addFiles(fileList) {
+  Array.from(fileList).forEach(file => {
+    if (selectedFiles.length >= 10) return;
+    if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+      selectedFiles.push(file);
+    }
+  });
+  renderFileList();
+}
+
+function renderFileList() {
+  const list = $("file-list");
+  list.innerHTML = selectedFiles.map((f, i) => `
+    <div class="file-pill">
+      <span>${getFileIcon(f.name)} ${f.name}</span>
+      <button type="button" onclick="removeFile(${i})" title="Remover">✕</button>
+    </div>
+  `).join('');
+}
+
+function removeFile(i) {
+  selectedFiles.splice(i, 1);
+  renderFileList();
+}
+
+function getFileIcon(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  if (['jpg','jpeg','png','gif','webp'].includes(ext)) return '🖼️';
+  if (ext === 'pdf') return '📄';
+  if (['doc','docx'].includes(ext)) return '📝';
+  return '📎';
+}
+
+// ─────────────────────────────────────────────
+// Validation
+// ─────────────────────────────────────────────
+function validateField(fieldId, inputId) {
+  const field = $(fieldId);
+  const input = $(inputId);
+  if (!input || !input.value.trim()) {
+    field.classList.add("invalid");
+    return false;
+  }
+  field.classList.remove("invalid");
+  return true;
+}
+
+function validate() {
+  let ok = true;
+  if (!$("cond-input").value.trim()) {
+    $("f-cond").classList.add("invalid");
+    ok = false;
+  }
+  if (!validateField("f-solicitante", "solicitante")) ok = false;
+  if (!validateField("f-contato", "contato")) ok = false;
+  if (!validateField("f-descricao", "descricao")) ok = false;
+  if (!selectedEquip.length) {
+    $("equip-error").style.display = "block";
+    ok = false;
+  }
+  return ok;
+}
+
+// ─────────────────────────────────────────────
+// Monday API helpers
+// ─────────────────────────────────────────────
+async function mondayQuery(query, token) {
+  const res = await fetch("https://api.monday.com/v2", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": token,
+      "API-Version": "2023-10"
+    },
+    body: JSON.stringify({ query })
+  });
+  const json = await res.json();
+  if (json.errors) throw new Error(json.errors[0].message);
+  return json.data;
+}
+
+async function findOrGetParentItemId(condName, condId, token, boardId) {
+  // If we have an ID from autocomplete, use it
+  if (condId) return condId;
+
+  // Otherwise search by name
+  const gql = `
+    query {
+      boards(ids: [${boardId}]) {
+        items_page(limit: 10, query_params: {rules: [{column_id: "name", compare_value: ["${condName.replace(/"/g,'')}"], operator: contains_text}]}) {
+          items { id name }
+        }
+      }
+    }
+  `;
+  const data = await mondayQuery(gql, token);
+  const items = data?.boards?.[0]?.items_page?.items || [];
+  if (items.length > 0) return items[0].id;
+
+  // Not found: create parent item
+  const createGql = `
+    mutation {
+      create_item(board_id: ${boardId}, item_name: "${condName.replace(/"/g,'\\"')}") {
+        id
+      }
+    }
+  `;
+  const created = await mondayQuery(createGql, token);
+  return created?.create_item?.id;
+}
+
+async function createSubitem(parentId, subitemName, columnValues, token) {
+  const colStr = JSON.stringify(JSON.stringify(columnValues));
+  const gql = `
+    mutation {
+      create_subitem(parent_item_id: ${parentId}, item_name: ${JSON.stringify(subitemName)}, column_values: ${colStr}) {
+        id
+        name
+      }
+    }
+  `;
+  const data = await mondayQuery(gql, token);
+  return data?.create_subitem;
+}
+
+async function uploadFileToItem(itemId, file, token) {
+  const form = new FormData();
+  form.append("query", `mutation ($file: File!) { add_file_to_column(item_id: ${itemId}, column_id: "files", file: $file) { id } }`);
+  form.append("variables[file]", file);
+  const res = await fetch("https://api.monday.com/v2/file", {
+    method: "POST",
+    headers: { "Authorization": token },
+    body: form
+  });
+  return res.json();
+}
+
+// ─────────────────────────────────────────────
+// Form submit
+// ─────────────────────────────────────────────
+$("chamado-form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  if (!validate()) {
+    setStatus("⚠️ Corrija os campos destacados antes de enviar.", "var(--warn)");
+    return;
+  }
+
+  const token = $("api-token").value.trim();
+  const boardId = $("board-id").value.trim();
+
+  if (!token) {
+    showToast("Informe o API Token Monday nas configurações acima.", "error");
+    toggleConfig();
+    return;
+  }
+  if (!boardId) {
+    showToast("Informe o Board ID Monday nas configurações acima.", "error");
+    toggleConfig();
+    return;
+  }
+
+  // Gather values
+  const condName = $("cond-input").value.trim();
+  const condId   = $("cond-id").value.trim();
+  const solicitante = $("solicitante").value.trim();
+  const contato  = $("contato").value.trim();
+  const endereco = $("endereco").value.trim();
+  const descricao = $("descricao").value.trim();
+  let equipamento = selectedEquip.filter(v => v !== "Outro").join(", ");
+  const outro = $("equip-outro").value.trim();
+  if (outro) equipamento = equipamento ? `${equipamento}, ${outro}` : outro;
+
+  const subitemName = `Chamado — ${condName} — ${new Date().toLocaleDateString('pt-BR')}`;
+
+  // Column values for subitem
+  // Adjust column IDs below to match your actual Monday column IDs
+  const columnValues = {
+    // "text_column_id": "value",   — example
+    // The subitem name already carries the main info
+    // Add known column IDs from your board here:
+  };
+
+  // Build description text for the update
+  const cnpj = $("cnpj").value.trim();
+  const updateText = [
+    `📋 *Solicitante:* ${solicitante}`,
+    `📞 *Contato:* ${contato}`,
+    endereco ? `📍 *Endereço:* ${endereco}` : null,
+    cnpj ? `🏢 *CNPJ:* ${cnpj}` : null,
+    `🔧 *Equipamento:* ${equipamento}`,
+    `📝 *Descrição:* ${descricao}`,
+  ].filter(Boolean).join('\n');
+
+  // UI loading
+  const btn = $("btn-submit");
+  btn.disabled = true;
+  $("btn-text").textContent = "Enviando...";
+  $("btn-spinner").style.display = "block";
+  setStatus("🔄 Localizando condomínio no Monday...", "var(--text-muted)");
+
+  try {
+    // 1. Find parent item
+    const parentId = await findOrGetParentItemId(condName, condId, token, boardId);
+    if (!parentId) throw new Error("Não foi possível localizar ou criar o condomínio no board.");
+
+    setStatus("🔄 Criando sub-item de atendimento...", "var(--text-muted)");
+
+    // 2. Create subitem
+    const subitem = await createSubitem(parentId, subitemName, columnValues, token);
+    if (!subitem?.id) throw new Error("Falha ao criar o sub-item no Monday.");
+
+    const subitemId = subitem.id;
+
+    // 3. Add update (comment with all details)
+    setStatus("🔄 Registrando detalhes do chamado...", "var(--text-muted)");
+    await mondayQuery(`
+      mutation {
+        create_update(item_id: ${subitemId}, body: ${JSON.stringify(updateText)}) { id }
+      }
+    `, token);
+
+    // 4. Upload files
+    if (selectedFiles.length > 0) {
+      setStatus(`🔄 Enviando ${selectedFiles.length} arquivo(s)...`, "var(--text-muted)");
+      for (const file of selectedFiles) {
+        try {
+          await uploadFileToItem(subitemId, file, token);
+        } catch(fe) {
+          console.warn("Erro ao enviar arquivo:", file.name, fe);
+        }
+      }
+    }
+
+    // Success!
+    setStatus("");
+    showToast(`Chamado criado com sucesso! ID: ${subitemId}`, "success");
+
+    // Reset form
+    $("chamado-form").reset();
+    selectedFiles = [];
+    selectedEquip = [];
+    renderFileList();
+    document.querySelectorAll(".chip.active").forEach(c => c.classList.remove("active"));
+    $("equipamento").value = "";
+    $("cond-id").value = "";
+    $("f-equip-outro").style.display = "none";
+
+    setStatus(`✅ Sub-item criado no Monday — ID ${subitemId}`, "var(--success)");
+
+  } catch(err) {
+    console.error(err);
+    showToast(err.message || "Erro ao conectar com o Monday.", "error");
+    setStatus("❌ " + (err.message || "Falha no envio"), "var(--error)");
+  } finally {
+    btn.disabled = false;
+    $("btn-text").textContent = "Registrar Chamado";
+    $("btn-spinner").style.display = "none";
+  }
+});
+
+
+// CNPJ mask
+$("cnpj").addEventListener("input", function() {
+  let v = this.value.replace(/\D/g, "").slice(0, 14);
+  if (v.length > 12)     v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, "$1.$2.$3/$4-$5");
+  else if (v.length > 8) v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,4})/, "$1.$2.$3/$4");
+  else if (v.length > 5) v = v.replace(/^(\d{2})(\d{3})(\d{0,3})/, "$1.$2.$3");
+  else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,3})/, "$1.$2");
+  this.value = v;
+});
+
+// Live validation
+["solicitante","contato","descricao"].forEach(id => {
+  $(id).addEventListener("input", () => {
+    const field = $(id === "descricao" ? "f-descricao" : id === "solicitante" ? "f-solicitante" : "f-contato");
+    if ($(id).value.trim()) field.classList.remove("invalid");
+  });
+});
+$("cond-input").addEventListener("input", () => {
+  if ($("cond-input").value.trim()) $("f-cond").classList.remove("invalid");
+});
+</script>
+</body>
+</html>
